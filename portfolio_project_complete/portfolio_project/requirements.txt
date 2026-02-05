@@ -1,0 +1,17 @@
+# Core
+Django==5.0.1
+psycopg2-binary==2.9.9
+python-decouple==3.8
+gunicorn==21.2.0
+whitenoise==6.6.0
+
+# Markdown support
+markdown==3.5.2
+bleach==6.1.0
+
+# Forms and utilities
+django-crispy-forms==2.1
+crispy-bootstrap4==2.0
+
+# Production
+dj-database-url==2.1.0

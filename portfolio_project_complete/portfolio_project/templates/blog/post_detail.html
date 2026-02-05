@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.title }} - Blog{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <article>
+                {% if post.category %}
+                <a href="{% url 'blog:category' post.category.slug %}" class="badge bg-info text-dark text-decoration-none mb-3">
+                    {{ post.category.name }}
+                </a>
+                {% endif %}
+                
+                <h1 class="mb-3">{{ post.title }}</h1>
+                
+                <div class="text-muted mb-4">
+                    <span>By {{ post.author.get_full_name|default:post.author.username }}</span>
+                    <span class="mx-2">•</span>
+                    <span>{{ post.published_at|date:"F d, Y" }}</span>
+                </div>
+                
+                {% if post.featured_image %}
+                <img src="{{ post.featured_image.url }}" class="img-fluid mb-4 rounded" alt="{{ post.title }}">
+                {% endif %}
+                
+                <div class="blog-content">
+                    {{ post.get_content_html|safe }}
+                </div>
+                
+                {% if post.get_tags_list %}
+                <div class="mt-5 pt-4 border-top">
+                    <h6>Tags:</h6>
+                    {% for tag in post.get_tags_list %}
+                    <span class="badge bg-light text-dark border me-1">{{ tag }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </article>
+            
+            <div class="mt-5">
+                <a href="{% url 'blog:list' %}" class="btn btn-outline-secondary">← Back to Blog</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

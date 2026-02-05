@@ -1,0 +1,29 @@
+{
+    "name": "portfolio",
+    "description": "Django Portfolio Website",
+    "buildSettings": {
+        "buildpack": {
+            "name": "heroku/python"
+        }
+    },
+    "runtimeSettings": {
+        "startCommand": "gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --log-file -",
+        "port": 8080
+    },
+    "healthCheck": {
+        "path": "/",
+        "initialDelaySeconds": 30,
+        "periodSeconds": 10,
+        "timeoutSeconds": 5,
+        "successThreshold": 1,
+        "failureThreshold": 3
+    },
+    "resources": {
+        "cpu": "0.5",
+        "memory": "512Mi"
+    },
+    "scaling": {
+        "minReplicas": 1,
+        "maxReplicas": 1
+    }
+}

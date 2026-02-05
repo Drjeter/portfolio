@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Developer Portfolio{% endblock %}
+
+{% block content %}
+<section class="hero bg-dark text-light py-5">
+    <div class="container text-center py-5">
+        <h1 class="display-4 fw-bold mb-3">Full-Stack Software Engineer</h1>
+        <p class="lead mb-4">Building scalable web applications with Python, Django, and modern technologies</p>
+        <div>
+            <a href="{% url 'projects:list' %}" class="btn btn-light btn-lg me-2">View Projects</a>
+            <a href="{% url 'core:contact' %}" class="btn btn-outline-light btn-lg">Get in Touch</a>
+        </div>
+    </div>
+</section>
+
+{% if featured_projects %}
+<section class="py-5">
+    <div class="container">
+        <h2 class="mb-4">Featured Projects</h2>
+        <div class="row g-4">
+            {% for project in featured_projects %}
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    {% if project.images.first %}
+                    <img src="{{ project.images.first.image.url }}" class="card-img-top" alt="{{ project.title }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ project.title }}</h5>
+                        <p class="card-text">{{ project.short_description }}</p>
+                        <div class="mb-3">
+                            {% for tech in project.tech_stack.all %}
+                            <span class="badge bg-secondary me-1">{{ tech.name }}</span>
+                            {% endfor %}
+                        </div>
+                        <a href="{{ project.get_absolute_url }}" class="btn btn-primary">View Case Study</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'projects:list' %}" class="btn btn-outline-primary">View All Projects</a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% if featured_posts %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="mb-4">Recent Writing</h2>
+        <div class="row g-4">
+            {% for post in featured_posts %}
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        {% if post.category %}
+                        <span class="badge bg-info text-dark mb-2">{{ post.category.name }}</span>
+                        {% endif %}
+                        <h5 class="card-title">{{ post.title }}</h5>
+                        <p class="card-text">{{ post.excerpt }}</p>
+                        <p class="text-muted small">{{ post.published_at|date:"M d, Y" }}</p>
+                        <a href="{{ post.get_absolute_url }}" class="btn btn-sm btn-outline-primary">Read More</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'blog:list' %}" class="btn btn-outline-primary">View All Posts</a>
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}
