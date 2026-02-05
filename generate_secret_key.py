@@ -3,10 +3,16 @@
 Generate a secure SECRET_KEY for Django production use.
 Run this script and copy the output to your Northflank environment variables.
 """
-from django.core.management.utils import get_random_secret_key
+import secrets
+import string
+
+def generate_secret_key(length=50):
+    """Generate a secure random secret key."""
+    chars = string.ascii_letters + string.digits + string.punctuation
+    return ''.join(secrets.choice(chars) for _ in range(length))
 
 if __name__ == "__main__":
-    secret_key = get_random_secret_key()
+    secret_key = generate_secret_key()
     print("=" * 70)
     print("Generated Django SECRET_KEY:")
     print("=" * 70)
