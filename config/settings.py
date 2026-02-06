@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Security settings
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv(), default='localhost,127.0.0.1,.code.run')
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv(), default='localhost,127.0.0.1,.code.run,site--portfolio-web--fff5dzqp687t.code.run')
 
 # Application definition
 INSTALLED_APPS = [
@@ -45,8 +45,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# Proxy support for Northflank/load balancers
+# Proxy and CSRF support for Northflank/load balancers
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+CSRF_TRUSTED_ORIGINS = [
+    'https://site--portfolio-web--fff5dzqp687t.code.run',
+    'https://*.code.run'
+]
 
 ROOT_URLCONF = 'config.urls'
 
