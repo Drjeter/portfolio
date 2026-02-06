@@ -12,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Security settings
 SECRET_KEY = config('SECRET_KEY', default='')
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = True  # FORCED TRUE FOR DEBUGGING
 ALLOWED_HOSTS = ['*']
 
 # Diagnostic logging
