@@ -15,6 +15,16 @@ SECRET_KEY = config('SECRET_KEY', default='')
 DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv(), default='localhost,127.0.0.1,.code.run,site--portfolio-web--fff5dzqp687t.code.run')
 
+# Ensure critical domains are always present for Northflank
+if '.code.run' not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append('.code.run')
+if 'site--portfolio-web--fff5dzqp687t.code.run' not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append('site--portfolio-web--fff5dzqp687t.code.run')
+
+# Diagnostic logging
+import sys
+print(f"DEBUG: ACTIVE ALLOWED_HOSTS: {ALLOWED_HOSTS}", file=sys.stderr)
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -46,6 +56,7 @@ MIDDLEWARE = [
 ]
 
 # Proxy and CSRF support for Northflank/load balancers
+USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 CSRF_TRUSTED_ORIGINS = [
     'https://site--portfolio-web--fff5dzqp687t.code.run',
