@@ -11,9 +11,18 @@ import dj_database_url
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Security settings
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = config('SECRET_KEY', default='')
 DEBUG = config('DEBUG', default=True, cast=bool)
 ALLOWED_HOSTS = ['*']
+
+# Diagnostic logging for Northflank (visible in runtime logs)
+import sys
+print(f"--- DIAGNOSTIC LOG START ---", file=sys.stderr)
+print(f"DEBUG: {DEBUG}", file=sys.stderr)
+print(f"SECRET_KEY present: {bool(SECRET_KEY)}", file=sys.stderr)
+print(f"DATABASE_URL present: {bool(config('DATABASE_URL', default=''))}", file=sys.stderr)
+print(f"NF_PORTFOLIO_DB_POSTGRES_URI present: {bool(config('NF_PORTFOLIO_DB_POSTGRES_URI', default=''))}", file=sys.stderr)
+print(f"--- DIAGNOSTIC LOG END ---", file=sys.stderr)
 
 # Application definition
 INSTALLED_APPS = [
@@ -73,13 +82,24 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
+# Prefer DATABASE_URL, then Northflank's URI variable
+db_url = config('DATABASE_URL', default=config('NF_PORTFOLIO_DB_POSTGRES_URI', default=''))
+
 DATABASES = {
     'default': dj_database_url.config(
-        default=config('DATABASE_URL', default=config('NF_PORTFOLIO_DB_POSTGRES_URI', default='')),
+        default=db_url,
         conn_max_age=600,
         conn_health_checks=True,
     )
 }
+
+# If both are missing, dj_database_url might return an empty dict or fail.
+# Ensure we have at least something for local fallback if both env vars are missing
+if not DATABASES['default']:
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
