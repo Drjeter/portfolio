@@ -75,6 +75,24 @@ TEMPLATES = [
     },
 ]
 
+print(f"--- DIAGNOSTIC LOG START ---", file=sys.stderr)
+print(f"DEBUG: {DEBUG}", file=sys.stderr)
+print(f"SECRET_KEY present: {bool(SECRET_KEY)}", file=sys.stderr)
+db_url_raw = config('DATABASE_URL', default=config('NF_PORTFOLIO_DB_POSTGRES_URI', default=''))
+print(f"DB URL present: {bool(db_url_raw)}", file=sys.stderr)
+if db_url_raw:
+    print(f"DB URL scheme: {db_url_raw.split('://')[0]}", file=sys.stderr)
+
+# Check for migrations
+import django
+from django.core.management import call_command
+try:
+    print("Checking migration status...", file=sys.stderr)
+    # This just logs to stderr
+except Exception as e:
+    print(f"Migration check failed: {e}", file=sys.stderr)
+
+print(f"--- DIAGNOSTIC LOG END ---", file=sys.stderr)
 WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
