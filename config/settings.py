@@ -13,13 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Security settings
 SECRET_KEY = config('SECRET_KEY', default='')
 DEBUG = config('DEBUG', default=False, cast=bool)
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv(), default='localhost,127.0.0.1,.code.run,site--portfolio-web--fff5dzqp687t.code.run')
-
-# Ensure critical domains are always present for Northflank
-if '.code.run' not in ALLOWED_HOSTS:
-    ALLOWED_HOSTS.append('.code.run')
-if 'site--portfolio-web--fff5dzqp687t.code.run' not in ALLOWED_HOSTS:
-    ALLOWED_HOSTS.append('site--portfolio-web--fff5dzqp687t.code.run')
+ALLOWED_HOSTS = ['*']
 
 # Diagnostic logging
 import sys
@@ -145,7 +139,7 @@ CONTACT_EMAIL = config('CONTACT_EMAIL', default='')
 
 # Security settings for production
 if not DEBUG:
-    SECURE_SSL_REDIRECT = True
+    SECURE_SSL_REDIRECT = False  # Temporarily disabled
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_BROWSER_XSS_FILTER = True
