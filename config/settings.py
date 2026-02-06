@@ -12,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Security settings
 SECRET_KEY = config('SECRET_KEY', default='')
-DEBUG = config('DEBUG', default=True, cast=bool)
+DEBUG = True  # FORCED TRUE FOR DEBUGGING - DON'T FORGET TO REVERT
 ALLOWED_HOSTS = ['*']
 
 # Diagnostic logging for Northflank (visible in runtime logs)
@@ -20,8 +20,10 @@ import sys
 print(f"--- DIAGNOSTIC LOG START ---", file=sys.stderr)
 print(f"DEBUG: {DEBUG}", file=sys.stderr)
 print(f"SECRET_KEY present: {bool(SECRET_KEY)}", file=sys.stderr)
-print(f"DATABASE_URL present: {bool(config('DATABASE_URL', default=''))}", file=sys.stderr)
-print(f"NF_PORTFOLIO_DB_POSTGRES_URI present: {bool(config('NF_PORTFOLIO_DB_POSTGRES_URI', default=''))}", file=sys.stderr)
+db_url_raw = config('DATABASE_URL', default=config('NF_PORTFOLIO_DB_POSTGRES_URI', default=''))
+print(f"DB URL present: {bool(db_url_raw)}", file=sys.stderr)
+if db_url_raw:
+    print(f"DB URL starts with: {db_url_raw[:10]}...", file=sys.stderr)
 print(f"--- DIAGNOSTIC LOG END ---", file=sys.stderr)
 
 # Application definition
