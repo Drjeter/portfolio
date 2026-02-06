@@ -12,12 +12,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Security settings
 SECRET_KEY = config('SECRET_KEY', default='')
-DEBUG = True  # FORCED TRUE FOR DEBUGGING
-ALLOWED_HOSTS = ['*']
+DEBUG = config('DEBUG', default=False, cast=bool)
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv(), default='localhost,127.0.0.1,.code.run,site--portfolio-web--fff5dzqp687t.code.run')
 
-# Diagnostic logging
-import sys
-print(f"DEBUG: ACTIVE ALLOWED_HOSTS: {ALLOWED_HOSTS}", file=sys.stderr)
+# Ensure critical domains are always present for Northflank
+if '.code.run' not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append('.code.run')
+if 'site--portfolio-web--fff5dzqp687t.code.run' not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append('site--portfolio-web--fff5dzqp687t.code.run')
 
 # Application definition
 INSTALLED_APPS = [
@@ -75,24 +77,6 @@ TEMPLATES = [
     },
 ]
 
-print(f"--- DIAGNOSTIC LOG START ---", file=sys.stderr)
-print(f"DEBUG: {DEBUG}", file=sys.stderr)
-print(f"SECRET_KEY present: {bool(SECRET_KEY)}", file=sys.stderr)
-db_url_raw = config('DATABASE_URL', default=config('NF_PORTFOLIO_DB_POSTGRES_URI', default=''))
-print(f"DB URL present: {bool(db_url_raw)}", file=sys.stderr)
-if db_url_raw:
-    print(f"DB URL scheme: {db_url_raw.split('://')[0]}", file=sys.stderr)
-
-# Check for migrations
-import django
-from django.core.management import call_command
-try:
-    print("Checking migration status...", file=sys.stderr)
-    # This just logs to stderr
-except Exception as e:
-    print(f"Migration check failed: {e}", file=sys.stderr)
-
-print(f"--- DIAGNOSTIC LOG END ---", file=sys.stderr)
 WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
@@ -157,7 +141,7 @@ CONTACT_EMAIL = config('CONTACT_EMAIL', default='')
 
 # Security settings for production
 if not DEBUG:
-    SECURE_SSL_REDIRECT = False  # Temporarily disabled
+    SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_BROWSER_XSS_FILTER = True
