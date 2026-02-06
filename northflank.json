@@ -1,6 +1,11 @@
 {
     "name": "portfolio",
     "description": "Django Portfolio Website",
+    "vcsData": {
+        "projectUrl": "https://github.com/Drjeter/portfolio",
+        "projectType": "github",
+        "projectBranch": "main"
+    },
     "buildSettings": {
         "buildpack": {
             "name": "heroku/python"
