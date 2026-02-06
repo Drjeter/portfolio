@@ -12,19 +12,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Security settings
 SECRET_KEY = config('SECRET_KEY', default='')
-DEBUG = True  # FORCED TRUE FOR DEBUGGING - DON'T FORGET TO REVERT
-ALLOWED_HOSTS = ['*']
-
-# Diagnostic logging for Northflank (visible in runtime logs)
-import sys
-print(f"--- DIAGNOSTIC LOG START ---", file=sys.stderr)
-print(f"DEBUG: {DEBUG}", file=sys.stderr)
-print(f"SECRET_KEY present: {bool(SECRET_KEY)}", file=sys.stderr)
-db_url_raw = config('DATABASE_URL', default=config('NF_PORTFOLIO_DB_POSTGRES_URI', default=''))
-print(f"DB URL present: {bool(db_url_raw)}", file=sys.stderr)
-if db_url_raw:
-    print(f"DB URL starts with: {db_url_raw[:10]}...", file=sys.stderr)
-print(f"--- DIAGNOSTIC LOG END ---", file=sys.stderr)
+DEBUG = config('DEBUG', default=False, cast=bool)
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv(), default='localhost,127.0.0.1,.code.run,site--portfolio-web--fff5dzqp687t.code.run')
 
 # Application definition
 INSTALLED_APPS = [
@@ -145,7 +134,7 @@ CONTACT_EMAIL = config('CONTACT_EMAIL', default='')
 
 # Security settings for production
 if not DEBUG:
-    SECURE_SSL_REDIRECT = False  # Disabled for debugging
+    SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_BROWSER_XSS_FILTER = True
