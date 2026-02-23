@@ -69,7 +69,7 @@ class Post(models.Model):
         """Convert markdown to safe HTML"""
         html = markdown.markdown(
             self.content,
-            extensions=['fenced_code', 'codehilite', 'tables', 'toc']
+            extensions=['fenced_code', 'codehilite', 'tables', 'toc', 'sane_lists']
         )
         allowed_tags = [
             'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
@@ -84,6 +84,13 @@ class Post(models.Model):
             'code': ['class'],
             'div': ['class'],
             'span': ['class'],
+            'ol': ['start'],
+            'h1': ['id'],
+            'h2': ['id'],
+            'h3': ['id'],
+            'h4': ['id'],
+            'h5': ['id'],
+            'h6': ['id'],
         }
         return bleach.clean(html, tags=allowed_tags, attributes=allowed_attrs)
     

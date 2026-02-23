@@ -69,7 +69,7 @@ class Post(models.Model):
         """Convert markdown to safe HTML"""
         html = markdown.markdown(
             self.content,
-            extensions=['fenced_code', 'codehilite', 'tables', 'toc']
+            extensions=['fenced_code', 'codehilite', 'tables', 'toc', 'sane_lists']
         )
         allowed_tags = [
             'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
