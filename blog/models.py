@@ -84,6 +84,13 @@ class Post(models.Model):
             'code': ['class'],
             'div': ['class'],
             'span': ['class'],
+            'ol': ['start'],
+            'h1': ['id'],
+            'h2': ['id'],
+            'h3': ['id'],
+            'h4': ['id'],
+            'h5': ['id'],
+            'h6': ['id'],
         }
         return bleach.clean(html, tags=allowed_tags, attributes=allowed_attrs)
     
