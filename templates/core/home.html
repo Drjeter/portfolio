@@ -26,9 +26,19 @@
             {% for project in featured_projects %}
             <div class="col-md-4">
                 <div class="card h-100 shadow-sm">
-                    {% if project.images.first %}
-                    <img src="{{ project.images.first.image.url }}" class="card-img-top" alt="{{ project.title }}">
+                    {% with first_image=project.images.first %}
+                    {% if first_image.static_image_path %}
+                    <img src="{% static first_image.static_image_path %}" class="card-img-top"
+                        alt="{{ project.title }}">
+                    {% elif first_image.image %}
+                    <img src="{{ first_image.image.url }}" class="card-img-top" alt="{{ project.title }}">
+                    {% else %}
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center"
+                        style="height: 200px;">
+                        <span class="text-muted">No Image</span>
+                    </div>
                     {% endif %}
+                    {% endwith %}
                     <div class="card-body">
                         <h5 class="card-title">{{ project.title }}</h5>
                         <p class="card-text">{{ project.short_description }}</p>
