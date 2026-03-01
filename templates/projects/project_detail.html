@@ -40,6 +40,10 @@
                         <img src="{% static image.static_image_path %}" class="d-block w-100" alt="{{ image.caption }}">
                         {% elif image.image %}
                         <img src="{{ image.image.url }}" class="d-block w-100" alt="{{ image.caption }}">
+                        {% else %}
+                        <div class="bg-light d-flex align-items-center justify-content-center" style="height: 300px;">
+                            <span class="text-muted">Image Not Available</span>
+                        </div>
                         {% endif %}
                         {% if image.caption %}
                         <div class="carousel-caption d-none d-md-block">
