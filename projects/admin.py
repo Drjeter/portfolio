@@ -8,7 +8,7 @@ from .models import Project, ProjectImage, TechStack
 class ProjectImageInline(admin.TabularInline):
     model = ProjectImage
     extra = 1
-    fields = ['image', 'caption', 'order']
+    fields = ['image', 'static_image_path', 'caption', 'order']
 
 
 @admin.register(Project)

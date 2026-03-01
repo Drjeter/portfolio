@@ -94,7 +94,12 @@ class Project(models.Model):
 class ProjectImage(models.Model):
     """Screenshots/images for projects"""
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to='projects/%Y/%m/')
+    image = models.ImageField(upload_to='projects/%Y/%m/', blank=True, null=True)
+    static_image_path = models.CharField(
+        max_length=255, 
+        blank=True, 
+        help_text="Path to image in static folder (e.g., images/projects/project1.jpg)"
+    )
     caption = models.CharField(max_length=200, blank=True)
     order = models.IntegerField(default=0)
     
